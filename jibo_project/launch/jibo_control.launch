@@ -1,0 +1,25 @@
+<launch>
+    <param name="robot_description" command="cat $(find jibo_project)/urdf/jibo_wheels.urdf" />
+
+    <!-- send fake joint values -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="TRUE"/>
+     </node>
+
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find jibo_project)/config/load_jibo_controller_wheels.yaml" command="load"/>
+
+    <!-- load the controllers -->
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/jibo" args="waist_wheel1_joint_position_controller waist_wheel2_joint_position_controller
+                                        base_waist_joint_position_controller waist_body_joint_position_controller
+                                        body_head_joint_position_controller joint_state_controller "/>
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">
+        <remap from="/joint_states" to="/jibo/joint_states" />
+    </node>
+
+</launch>

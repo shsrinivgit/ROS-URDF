@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <include file="$(find jibo_project)/launch/spawn_jibo_wheels.launch"/>
+    <include file="$(find jibo_project)/launch/jibo_control.launch"/>
+</launch>
